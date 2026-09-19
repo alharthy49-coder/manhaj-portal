@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة المستشار الأكاديمي -</title>
+  <title>بوابة المستشار الأكاديمي - منهج الطالبين</title>
   <style>
     :root {
       --primary: #154c3e;
@@ -24,12 +24,12 @@
     }
 
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 1150px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 10px 30px rgba(21,76,62,0.08); padding: 30px; border: 2px solid var(--accent); }
+    body { background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; min-height: 90vh; }
+    .container { width: 100%; max-width: 1150px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 10px 30px rgba(21,76,62,0.08); padding: 30px; border: 2px solid var(--accent); margin: auto; }
 
     .portal-header { text-align: center; border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 25px; background: linear-gradient(to bottom, var(--accent-light), #fff); border-radius: 12px 12px 0 0; padding-top: 15px; }
     .portal-header h1 { color: var(--primary); margin: 0 0 6px 0; font-size: 28px; font-weight: 700; }
-    .portal-header p { color: var(--text-muted); margin: 0; font-size: 15px; font-weight: 500; }
+    .portal-header p { color: var(--accent); margin: 0; font-size: 15px; font-weight: bold; }
 
     .nav-title-bar { font-size: 14px; font-weight: bold; color: var(--primary); margin-bottom: 12px; text-align: center; }
     .program-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -128,10 +128,12 @@
     .verdict-low { background: var(--warning); color: #fff; }
     .verdict-high { background: var(--danger); color: #fff; }
 
-    .alert-banner { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; }
-    .alert-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid #feb2b2; }
-    .alert-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid #fbd38d; }
-    .alert-success { background: var(--success-bg); color: var(--success); border: 1px solid #9ae6b4; }
+    .back-link { display: inline-block; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+    .back-link:hover { text-decoration: underline; }
+
+    footer { margin-top: 40px; font-size: 14px; color: #666; text-align: center; border-top: 1px solid var(--border); padding-top: 20px; }
+    footer a { color: var(--primary); text-decoration: none; font-weight: bold; }
+    footer a:hover { text-decoration: underline; }
 
     @media (max-width: 768px) {
       .program-nav { grid-template-columns: 1fr; }
@@ -143,8 +145,8 @@
 
 <div class="container">
   <div class="portal-header">
-    <h1>بوابة المستشار الأكاديمي الشاملة</h1>
-    <p>سعي على بصيرة</p>
+    <h1>بوابة المستشار الأكاديمي</h1>
+    <p>بحسب الأنظمة المعتمدة في كلية العلوم الشرعية</p>
   </div>
 
   <div class="nav-title-bar">اختر المرحلة الدراسية للمستشار الأكاديمي:</div>
@@ -476,6 +478,12 @@
       <div id="ma-solutions"></div>
     </div>
   </div>
+
+  <a href="../index.html" class="back-link">← العودة إلى الرئيسية</a>
+  
+  <footer>
+    للاقتراحات والاستفسار: <span dir="ltr" style="unicode-bidi: embed; display: inline-block;">alharthy49@gmail.com</span>
+  </footer>
 </div>
 
 <script>
