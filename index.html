@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>منهج الطالبين | البوابة الأكاديمية</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 50px 20px; text-align: center; }
+        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 50px 20px; text-align: center; display: flex; flex-direction: column; min-height: 90vh; }
+        .content-wrapper { flex: 1; }
         .header { margin-bottom: 50px; }
         h1 { color: #1a365d; font-size: 38px; margin-bottom: 10px; font-weight: bold; }
         .subtitle { color: #d4af37; font-size: 20px; font-weight: bold; margin-top: 0; }
@@ -13,22 +14,30 @@
         .card:hover { transform: translateY(-8px); border-top-color: #d4af37; }
         .card-title { font-size: 24px; color: #1a365d; margin-bottom: 15px; font-weight: bold; }
         .card-desc { font-size: 16px; color: #555; line-height: 1.6; }
+        footer { margin-top: 50px; font-size: 14px; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
+        footer a { color: #1a365d; text-decoration: none; font-weight: bold; }
+        footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>منهج الطالبين</h1>
-        <p class="subtitle">المنصة الأكاديمية لتقييم المقترحات والدراسات العليا</p>
+    <div class="content-wrapper">
+        <div class="header">
+            <h1>منهج الطالبين</h1>
+            <p class="subtitle">علم على بصيرة</p>
+        </div>
+        <div class="container">
+            <a href="advisor/index.html" class="card">
+                <div class="card-title">المستشار الأكاديمي</div>
+                <div class="card-desc">بوابة التوجيه والإرشاد لتوجيه مسارك الدراسي.</div>
+            </a>
+            <a href="gpa/index.html" class="card">
+                <div class="card-title">حاسبة المعدل التراكمي</div>
+                <div class="card-desc">أداة دقيقة لمحاكاة وتقييم الأداء الأكاديمي بفعالية.</div>
+            </a>
+        </div>
     </div>
-    <div class="container">
-        <a href="advisor/index.html" class="card">
-            <div class="card-title">المستشار الأكاديمي</div>
-            <div class="card-desc">بوابة التوجيه والإرشاد لدعم مسيرتك البحثية ومراجعة المقترحات.</div>
-        </a>
-        <a href="gpa/index.html" class="card">
-            <div class="card-title">حاسبة المعدل التراكمي</div>
-            <div class="card-desc">أداة دقيقة لمحاكاة وتقييم الأداء الأكاديمي بفعالية.</div>
-        </a>
-    </div>
+    <footer>
+        للاقتراحات والاستفسار: <span dir="ltr" style="unicode-bidi: embed; display: inline-block;">alharthy49@gmail.com</span>
+    </footer>
 </body>
 </html>
