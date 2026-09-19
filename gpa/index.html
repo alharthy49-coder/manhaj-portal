@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة المعدل الأكاديمي الموزون</title>
+  <style>
+    :root {
+      --primary: #1b365d;
+      --primary-light: #2c5282;
+      --accent: #c5a059;
+      --bg: #f7fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #2d3748;
+      --text-muted: #718096;
+      --danger: #e53e3e;
+      --success: #38a169;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      padding: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 15px;
+    }
+
+    .header h1 {
+      color: var(--primary);
+      margin: 0 0 10px 0;
+      font-size: 24px;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* أزرار اختيار البرنامج */
+    .program-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      justify-content: center;
+    }
+
+    .program-btn {
+      flex: 1;
+      max-width: 250px;
+      padding: 12px 20px;
+      border: 2px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .program-btn.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(27, 54, 93, 0.2);
+    }
+
+    /* بيانات الفصول السابقة */
+    .section-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input, select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-light);
+    }
+
+    /* جدول المواد */
+    .courses-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .courses-table th {
+      background: #edf2f7;
+      color: var(--primary);
+      padding: 12px;
+      font-size: 13px;
+      text-align: right;
+      border-radius: 6px;
+    }
+
+    .courses-table td {
+      padding: 8px 6px;
+      vertical-align: middle;
+    }
+
+    .courses-table input {
+      width: 100%;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: #edf2f7;
+      font-weight: bold;
+      font-size: 13px;
+      color: var(--primary);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    .delete-btn {
+      background: #fed7d7;
+      color: var(--danger);
+      border: none;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .delete-btn:hover {
+      background: #feb2b2;
+    }
+
+    .table-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+    }
+
+    .action-btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-add {
+      background: #ebf8ff;
+      color: var(--primary-light);
+      border: 1px solid #bee3f8;
+    }
+
+    .btn-add:hover {
+      background: #bee3f8;
+    }
+
+    .btn-reset {
+      background: #f7fafc;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      background: #edf2f7;
+    }
+
+    /* كرت النتائج */
+    .results-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #0d1e38 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 25px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(27, 54, 93, 0.25);
+    }
+
+    .result-box h3 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+      color: #cbd5e0;
+      font-weight: normal;
+    }
+
+    .result-box .gpa-val {
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 5px 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .result-box .sub-info {
+      font-size: 13px;
+      color: #a0aec0;
+    }
+
+    @media (max-width: 650px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .results-card { grid-template-columns: 1fr; }
+      .courses-table th:first-child, .courses-table td:first-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>حاسبة المعدل الأكاديمي الموزون</h1>
+      <p>وفق اللائحة المعتمدة لاحتساب نقاط الدبلوم، البكالوريوس، والماجستير</p>
+    </div>
+
+    <!-- اختيار البرنامج -->
+    <div class="program-selector">
+      <button class="program-btn active" id="btn-ug" onclick="setProgram('UG')">الدبلوم والبكالوريوس</button>
+      <button class="program-btn" id="btn-pg" onclick="setProgram('PG')">الماجستير</button>
+    </div>
+
+    <!-- السجل التراكمي السابق (اختياري) -->
+    <div class="section-card">
+      <div class="section-title">بيانات السجل التراكمي السابق (اختياري)</div>
+      <div class="grid-2">
+        <div class="input-group">
+          <label>المعدل التراكمي السابق (من 4.00):</label>
+          <input type="number" id="prev-gpa" step="0.01" min="0" max="4" placeholder="مثال: 2.90" oninput="calculate()">
+        </div>
+        <div class="input-group">
+          <label>إجمالي الساعات السابقة المنجزة:</label>
+          <input type="number" id="prev-hours" step="1" min="0" placeholder="مثال: 40" oninput="calculate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- جدول مواد الفصل الحالي -->
+    <div class="section-card">
+      <div class="section-title">مواد الفصل الحالي</div>
+      <table class="courses-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">اسم المادة (اختياري)</th>
+            <th style="width: 25%;">الدرجة (من 100)</th>
+            <th style="width: 20%;">الساعات</th>
+            <th style="width: 15%; text-align: center;">التقدير</th>
+            <th style="width: 10%; text-align: center;">حذف</th>
+          </tr>
+        </thead>
+        <tbody id="courses-body">
+          <!-- تضاف الصفوف برمجياً -->
+        </tbody>
+      </table>
+
+      <div class="table-actions">
+        <button class="action-btn btn-add" onclick="addRow()">+ إضافة مادة أخرى</button>
+        <button class="action-btn btn-reset" onclick="resetAll()">إعادة تعيين</button>
+      </div>
+    </div>
+
+    <!-- شاشة إظهار النتائج -->
+    <div class="results-card">
+      <div class="result-box">
+        <h3>المعدل الفصلي</h3>
+        <div class="gpa-val" id="res-term-gpa">0.00</div>
+        <div class="sub-info">ساعات الفصل: <span id="res-term-hours">0</span> | النقاط: <span id="res-term-points">0.00</span></div>
+      </div>
+      <div class="result-box">
+        <h3>المعدل التراكمي الكلي</h3>
+        <div class="gpa-val" id="res-cum-gpa">0.00</div>
+        <div class="sub-info">إجمالي الساعات: <span id="res-total-hours">0</span> | إجمالي النقاط: <span id="res-total-points">0.00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentProgram = 'UG'; // 'UG' للبكالوريوس والدبلوم، 'PG' للماجستير
+
+    // سلم الدرجات والنقاط وفق الجدول الرسمي
+    function getGradeDetails(score, program) {
+      if (score === '' || isNaN(score) || score === null) {
+        return { grade: '-', points: null };
+      }
+      let s = parseFloat(score);
+
+      if (program === 'UG') {
+        if (s >= 95 && s <= 100) return { grade: 'أ', points: 4.00 };
+        if (s >= 90 && s < 95)   return { grade: 'أ-', points: 3.70 };
+        if (s >= 87 && s < 90)   return { grade: 'ب+', points: 3.30 };
+        if (s >= 83 && s < 87)   return { grade: 'ب', points: 3.00 };
+        if (s >= 80 && s < 83)   return { grade: 'ب-', points: 2.70 };
+        if (s >= 77 && s < 80)   return { grade: 'ج+', points: 2.30 };
+        if (s >= 73 && s < 77)   return { grade: 'ج', points: 2.00 };
+        if (s >= 70 && s < 73)   return { grade: 'ج-', points: 1.70 };
+        if (s >= 65 && s < 70)   return { grade: 'د+', points: 1.30 };
+        if (s >= 60 && s < 65)   return { grade: 'د', points: 1.00 };
+        return { grade: 'هـ', points: 0.00 };
+      } else {
+        // برنامج الماجستير
+        if (s >= 95 && s <= 100) return { grade: 'أ', points: 4.00 };
+        if (s >= 90 && s < 95)   return { grade: 'أ-', points: 3.70 };
+        if (s >= 87 && s < 90)   return { grade: 'ب+', points: 3.30 };
+        if (s >= 83 && s < 87)   return { grade: 'ب', points: 3.00 };
+        if (s >= 80 && s < 83)   return { grade: 'ب-', points: 2.70 };
+        if (s >= 75 && s < 80)   return { grade: 'ج+', points: 2.30 };
+        if (s >= 70 && s < 75)   return { grade: 'ج', points: 2.00 };
+        return { grade: 'هـ', points: 0.00 };
+      }
+    }
+
+    function setProgram(p) {
+      currentProgram = p;
+      document.getElementById('btn-ug').classList.toggle('active', p === 'UG');
+      document.getElementById('btn-pg').classList.toggle('active', p === 'PG');
+      calculate();
+    }
+
+    function addRow(name = '', score = '', hours = '3') {
+      const tbody = document.getElementById('courses-body');
+      const tr = document.createElement('tr');
+      tr.className = 'course-row';
+      tr.innerHTML = `
+        <td><input type="text" placeholder="اسم المقرر (اختياري)" value="${name}"></td>
+        <td><input type="number" class="c-score" min="0" max="100" placeholder="مثال: 85" value="${score}" oninput="calculate()"></td>
+        <td><input type="number" class="c-hours" min="1" max="12" placeholder="الساعات" value="${hours}" oninput="calculate()"></td>
+        <td style="text-align: center;"><span class="grade-badge c-badge">-</span></td>
+        <td style="text-align: center;"><button class="delete-btn" onclick="removeRow(this)">×</button></td>
+      `;
+      tbody.appendChild(tr);
+      calculate();
+    }
+
+    function removeRow(btn) {
+      const rows = document.querySelectorAll('.course-row');
+      if (rows.length > 1) {
+        btn.closest('tr').remove();
+        calculate();
+      }
+    }
+
+    function resetAll() {
+      document.getElementById('prev-gpa').value = '';
+      document.getElementById('prev-hours').value = '';
+      document.getElementById('courses-body').innerHTML = '';
+      // إضافة 4 مواد افتراضية
+      addRow('المقرر 1', '', '3');
+      addRow('المقرر 2', '', '3');
+      addRow('المقرر 3', '', '3');
+      addRow('المقرر 4', '', '2');
+      calculate();
+    }
+
+    function calculate() {
+      const rows = document.querySelectorAll('.course-row');
+      let termHours = 0;
+      let termPoints = 0;
+
+      rows.forEach(row => {
+        const scoreInput = row.querySelector('.c-score').value;
+        const hoursInput = parseFloat(row.querySelector('.c-hours').value) || 0;
+        const badge = row.querySelector('.c-badge');
+
+        const details = getGradeDetails(scoreInput, currentProgram);
+
+        if (details.points !== null && hoursInput > 0) {
+          badge.textContent = `${details.grade} (${details.points.toFixed(2)})`;
+          termHours += hoursInput;
+          termPoints += (details.points * hoursInput);
+        } else {
+          badge.textContent = details.grade !== '-' ? details.grade : '-';
+        }
+      });
+
+      // احتساب المعدل الفصلي
+      let termGPA = termHours > 0 ? (termPoints / termHours) : 0;
+      document.getElementById('res-term-gpa').textContent = termGPA.toFixed(2);
+      document.getElementById('res-term-hours').textContent = termHours;
+      document.getElementById('res-term-points').textContent = termPoints.toFixed(2);
+
+      // احتساب التراكمي
+      const prevGPA = parseFloat(document.getElementById('prev-gpa').value);
+      const prevHours = parseFloat(document.getElementById('prev-hours').value);
+
+      let totalHours = termHours;
+      let totalPoints = termPoints;
+
+      if (!isNaN(prevGPA) && !isNaN(prevHours) && prevHours > 0) {
+        totalHours += prevHours;
+        totalPoints += (prevGPA * prevHours);
+      }
+
+      let cumGPA = totalHours > 0 ? (totalPoints / totalHours) : 0;
+      document.getElementById('res-cum-gpa').textContent = cumGPA.toFixed(2);
+      document.getElementById('res-total-hours').textContent = totalHours;
+      document.getElementById('res-total-points').textContent = totalPoints.toFixed(2);
+    }
+
+    // تشغيل افتراضي بـ 4 صفوف
+    window.onload = () => {
+      resetAll();
+    };
+  </script>
+</body>
+</html>
