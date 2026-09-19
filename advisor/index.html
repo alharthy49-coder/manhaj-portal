@@ -85,7 +85,7 @@
     .grid-settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px; margin-bottom: 15px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 13px; font-weight: bold; color: var(--primary); }
-    .form-group input, .form-group select { padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; outline: none; background: #fff; }
+    .form-group input, .form-group select, .form-group textarea { padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; outline: none; background: #fff; }
 
     .help-text { font-size: 11px; color: var(--warning); font-weight: bold; margin-top: 2px; }
 
@@ -127,6 +127,10 @@
     .verdict-ok { background: var(--success); color: #fff; }
     .verdict-low { background: var(--warning); color: #fff; }
     .verdict-high { background: var(--danger); color: #fff; }
+
+    .notes-section { margin-top: 15px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
+    .notes-section label { display: block; font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 6px; }
+    .notes-section textarea { width: 100%; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; resize: vertical; outline: none; }
 
     .back-link { display: inline-block; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
     .back-link:hover { text-decoration: underline; }
@@ -217,7 +221,7 @@
       <div class="grid-settings">
         <div class="form-group">
           <label>الفصل المستهدف للتسجيل:</label>
-          <select id="dip-season" onchange="runDipAudit()">
+          <select id="dip-season" onchange="runDipAudit(false)">
             <option value="fall">فصل الخريف (المقررات الخريفية)</option>
             <option value="spring">فصل الربيع (المقررات الربيعية)</option>
             <option value="summer">فصل صيفي استثنائي</option>
@@ -230,11 +234,11 @@
         </div>
         <div class="form-group">
           <label>المعدل التراكمي السابق:</label>
-          <input type="number" id="dip-gpa" step="0.01" min="0" max="4" placeholder="مثال: 2.50" oninput="runDipAudit()">
+          <input type="number" id="dip-gpa" step="0.01" min="0" max="4" placeholder="مثال: 2.50" oninput="runDipAudit(false)">
         </div>
         <div class="form-group">
           <label>الفصل الدراسي الفعلي للطالب:</label>
-          <select id="dip-term-count" onchange="runDipAudit()">
+          <select id="dip-term-count" onchange="runDipAudit(false)">
             <option value="1">الفصل 1</option>
             <option value="2">الفصل 2</option>
             <option value="3">الفصل 3</option>
@@ -281,13 +285,17 @@
           <div class="basket-title">📋 جدولك الدراسي المختار لهذا الفصل (الدبلوم)</div>
           <div class="basket-stats">
             <div class="stat-pill">عدد المواد: <span id="dip-basket-count">0</span></div>
-            <div class="stat-pill">إجمالي الساعات: <span id="dip-basket-hours">0</span> ساعة</div>
+            <div class="stat-pill">إجمالي الساعات: <span id="dip-basket-hours">0</span> ساعة (حد أقصى 18)</div>
           </div>
         </div>
         <div class="basket-items-list" id="dip-basket-items">
           <span style="font-size:13px; color:#a0aec0;">لم تختر أي مادة بعد.</span>
         </div>
         <div class="basket-verdict" id="dip-basket-verdict">يرجى اختيار المقررات.</div>
+      </div>
+      <div class="notes-section">
+        <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
+        <textarea id="dip-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
       <div id="dip-solutions"></div>
     </div>
@@ -303,7 +311,7 @@
       <div class="grid-settings">
         <div class="form-group">
           <label>الفصل المستهدف للتسجيل:</label>
-          <select id="ba-season" onchange="runBAAudit()">
+          <select id="ba-season" onchange="runBAAudit(false)">
             <option value="fall">فصل الخريف (المقررات الخريفية)</option>
             <option value="spring">فصل الربيع (المقررات الربيعية)</option>
             <option value="summer">فصل صيفي استثنائي</option>
@@ -316,11 +324,11 @@
         </div>
         <div class="form-group">
           <label>المعدل التراكمي السابق:</label>
-          <input type="number" id="ba-gpa" step="0.01" min="0" max="4" placeholder="مثال: 2.80" oninput="runBAAudit()">
+          <input type="number" id="ba-gpa" step="0.01" min="0" max="4" placeholder="مثال: 2.80" oninput="runBAAudit(false)">
         </div>
         <div class="form-group">
           <label>الفصل الدراسي الفعلي للطالب:</label>
-          <select id="ba-term-count" onchange="runBAAudit()">
+          <select id="ba-term-count" onchange="runBAAudit(false)">
             <option value="1">الفصل 1</option>
             <option value="2">الفصل 2</option>
             <option value="3">الفصل 3</option>
@@ -371,13 +379,17 @@
           <div class="basket-title">📋 جدولك الدراسي المختار لهذا الفصل (البكالوريوس)</div>
           <div class="basket-stats">
             <div class="stat-pill">عدد المواد: <span id="ba-basket-count">0</span></div>
-            <div class="stat-pill">إجمالي الساعات: <span id="ba-basket-hours">0</span> ساعة</div>
+            <div class="stat-pill">إجمالي الساعات: <span id="ba-basket-hours">0</span> ساعة (حد أقصى 18)</div>
           </div>
         </div>
         <div class="basket-items-list" id="ba-basket-items">
           <span style="font-size:13px; color:#a0aec0;">لم تختر أي مادة بعد.</span>
         </div>
         <div class="basket-verdict" id="ba-basket-verdict">يرجى اختيار المقررات.</div>
+      </div>
+      <div class="notes-section">
+        <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
+        <textarea id="ba-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
       <div id="ba-solutions"></div>
     </div>
@@ -400,7 +412,7 @@
         </div>
         <div class="form-group">
           <label>الفصل المستهدف للتسجيل:</label>
-          <select id="ma-season" onchange="runMAAudit()">
+          <select id="ma-season" onchange="runMAAudit(false)">
             <option value="fall">فصل الخريف</option>
             <option value="spring">فصل الربيع</option>
           </select>
@@ -412,11 +424,11 @@
         </div>
         <div class="form-group">
           <label>المعدل التراكمي السابق:</label>
-          <input type="number" id="ma-gpa" step="0.01" min="0" max="4" placeholder="مثال: 3.50" oninput="runMAAudit()">
+          <input type="number" id="ma-gpa" step="0.01" min="0" max="4" placeholder="مثال: 3.50" oninput="runMAAudit(false)">
         </div>
         <div class="form-group">
           <label>الفصل الدراسي الحالي:</label>
-          <select id="ma-term-count" onchange="runMAAudit()"></select>
+          <select id="ma-term-count" onchange="runMAAudit(false)"></select>
         </div>
       </div>
 
@@ -474,6 +486,10 @@
           <span style="font-size:13px; color:#a0aec0;">لم تختر أي مادة بعد.</span>
         </div>
         <div class="basket-verdict" id="ma-basket-verdict">يرجى اختيار المقررات.</div>
+      </div>
+      <div class="notes-section">
+        <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
+        <textarea id="ma-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
       <div id="ma-solutions"></div>
     </div>
@@ -611,14 +627,14 @@
 
     if (p === 'ba') selectBASubTrack(currentBATrack);
     else if (p === 'ma') selectMATrack(currentMATrack);
-    else runDipAudit();
+    else runDipAudit(false);
   }
 
   function selectBASubTrack(track) {
     currentBATrack = track;
     document.querySelectorAll('#ba-sub-nav-container .sub-card').forEach(c => c.classList.remove('active'));
     document.getElementById(`sub-ba-${track}`).classList.add('active');
-    runBAAudit();
+    runBAAudit(false);
   }
 
   function selectMATrack(track) {
@@ -626,7 +642,7 @@
     document.querySelectorAll('#ma-sub-nav-container .sub-card').forEach(c => c.classList.remove('active'));
     document.getElementById(`sub-ma-${track}`).classList.add('active');
     initMATermDropdown();
-    runMAAudit();
+    runMAAudit(false);
   }
 
   function initMATermDropdown() {
@@ -648,11 +664,12 @@
 
   function onMAEnrollmentChange() {
     initMATermDropdown();
-    runMAAudit();
+    runMAAudit(false);
   }
 
   function initMAInventory() {
     const container = document.getElementById('ma-inventory-container');
+    if (container.children.length > 0) return; // منع إعادة البناء إذا كانت موجودة للحفاظ على تفاعل الصناديق
     container.innerHTML = '';
     const terms = [
       { num: 1, title: 'مقررات الفصل الدراسي الأول - 12 ساعة معتمدة', cls: 'season-fall', text: 'فصل 1' },
@@ -705,16 +722,10 @@
   function handleMAToggle(id, val) {
     if (val) maPassed.add(id);
     else maPassed.delete(id);
-    runMAAudit(true);
+    runMAAudit(false);
   }
 
   function runMAAudit(updateInput = true) {
-    const enrollType = document.getElementById('ma-enrollment-type').value;
-    const season = document.getElementById('ma-season').value;
-    const gpaInput = document.getElementById('ma-gpa').value;
-    const gpa = gpaInput === '' ? 0 : parseFloat(gpaInput);
-    const termCount = parseInt(document.getElementById('ma-term-count').value);
-
     initMAInventory();
     maPassed.forEach(id => {
       const chk = document.getElementById(`chk-ma-${id}`);
@@ -738,6 +749,8 @@
 
     const gateThesis = document.getElementById('gate-thesis-status');
     const gateDefense = document.getElementById('gate-defense-status');
+    const gpaInput = document.getElementById('ma-gpa').value;
+    const gpa = gpaInput === '' ? 0 : parseFloat(gpaInput);
     
     if (passedTotal >= 12) {
       gateThesis.textContent = '✅ مؤهل لتسجيل الرسالة';
@@ -751,13 +764,14 @@
       gateDefense.textContent = '✅ مؤهل للمناقشة والتخرج';
       gateDefense.style.color = 'var(--success)';
     } else {
-      gateDefense.textContent = '⛔ غير مؤهل (تحتاج 24س ومعدل $\ge$ 3.00)';
+      gateDefense.textContent = '⛔ غير مؤهل (تحتاج 24س ومعدل ≥ 3.00)';
       gateDefense.style.color = 'var(--danger)';
     }
 
     let remaining = relevant.filter(c => !maPassed.has(c.id));
     remaining.sort((a, b) => a.priority - b.priority);
 
+    const season = document.getElementById('ma-season').value;
     const tbody = document.getElementById('ma-table-body');
     tbody.innerHTML = '';
     remaining.forEach(c => {
@@ -779,13 +793,28 @@
   }
 
   function toggleMABasket(id, val) {
+    const enrollType = document.getElementById('ma-enrollment-type').value;
+    const maxAllowed = (enrollType === 'full') ? 12 : 6;
+    
+    let currentTotal = 0;
+    maBasket.forEach(bId => {
+      const c = MASTER_PLAN.find(x => x.id === bId);
+      if (c) currentTotal += c.hours;
+    });
+
+    const targetCourse = MASTER_PLAN.find(x => x.id === id);
+    if (val && targetCourse && (currentTotal + targetCourse.hours > maxAllowed)) {
+      alert(`عذراً، لا يمكنك تجاوز الحد الأقصى للساعات المسموحة في نظام التفرغ (${maxAllowed} ساعات).`);
+      event.target.checked = false;
+      return;
+    }
+
     if (val) maBasket.add(id);
     else maBasket.delete(id);
     updateMABasketUI();
   }
 
   function updateMABasketUI() {
-    const enrollType = document.getElementById('ma-enrollment-type').value;
     const list = document.getElementById('ma-basket-items');
     const cCount = document.getElementById('ma-basket-count');
     const hCount = document.getElementById('ma-basket-hours');
@@ -807,6 +836,7 @@
     cCount.textContent = count;
     hCount.textContent = totalH;
 
+    const enrollType = document.getElementById('ma-enrollment-type').value;
     const maxAllowed = (enrollType === 'full') ? 12 : 6;
     if (totalH === 0) {
       verdict.className = 'basket-verdict';
@@ -823,6 +853,7 @@
 
   function initBAInventory() {
     const container = document.getElementById('ba-inventory-container');
+    if (container.children.length > 0) return;
     container.innerHTML = '';
     const terms = [
       { num: 1, title: 'الفصل 1 (مشترك - خريف) - 16 ساعة', cls: 'season-fall', text: 'مشترك' },
@@ -847,6 +878,7 @@
     const target = parseInt(val);
     if (isNaN(target)) { baPassed.clear(); runBAAudit(false); return; }
     baPassed.clear();
+    baBasket.clear();
     let acc = 0;
     BA_PLAN.forEach(c => {
       if (acc + c.hours <= target) { baPassed.add(c.id); acc += c.hours; }
@@ -860,7 +892,7 @@
 
   function handleBAToggle(id, val) {
     if (val) baPassed.add(id); else baPassed.delete(id);
-    runBAAudit(true);
+    runBAAudit(false);
   }
 
   function runBAAudit(updateInput = true) {
@@ -876,25 +908,66 @@
     document.getElementById('ba-remaining-badge').textContent = `المتبقي: ${131 - passed} ساعة معتمدة`;
 
     let remaining = BA_PLAN.filter(c => !baPassed.has(c.id));
+    const season = document.getElementById('ba-season').value;
     const tbody = document.getElementById('ba-table-body');
     tbody.innerHTML = '';
     remaining.forEach(c => {
+      const isOffered = (c.season === season);
+      const isChecked = baBasket.has(c.id);
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td><strong>${c.name}</strong> (${c.code})</td><td>${c.hours}س</td><td>—</td><td>مطروحة</td><td style="text-align:center;"><input type="checkbox" onchange="toggleBABasket('${c.id}', this.checked)"></td>`;
+      tr.innerHTML = `
+        <td><strong>${c.name}</strong> (${c.code})</td>
+        <td>${c.hours}س</td>
+        <td>—</td>
+        <td>${isOffered ? 'مطروحة' : 'فصل مغاير'}</td>
+        <td style="text-align:center;">
+          ${isOffered ? `<input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleBABasket('${c.id}', this.checked)">` : '—'}
+        </td>`;
       tbody.appendChild(tr);
     });
   }
 
   function toggleBABasket(id, val) {
+    const maxAllowed = 18; // الحد الأقصى القياسي للساعات الفصلية
+    let currentTotal = 0;
+    baBasket.forEach(bId => {
+      const c = BA_PLAN.find(x => x.id === bId);
+      if (c) currentTotal += c.hours;
+    });
+
+    const targetCourse = BA_PLAN.find(x => x.id === id);
+    if (val && targetCourse && (currentTotal + targetCourse.hours > maxAllowed)) {
+      alert(`عذراً، الحد الأقصى للساعات المسموحة في الفصل هو ${maxAllowed} ساعات.`);
+      event.target.checked = false;
+      return;
+    }
+
     if (val) baBasket.add(id); else baBasket.delete(id);
     let total = 0;
     baBasket.forEach(id => { const c = BA_PLAN.find(x => x.id === id); if (c) total += c.hours; });
     document.getElementById('ba-basket-count').textContent = baBasket.size;
     document.getElementById('ba-basket-hours').textContent = total;
+
+    const list = document.getElementById('ba-basket-items');
+    list.innerHTML = '';
+    if (baBasket.size === 0) {
+      list.innerHTML = '<span style="font-size:13px; color:#a0aec0;">لم تختر أي مادة بعد.</span>';
+    } else {
+      baBasket.forEach(id => {
+        const c = BA_PLAN.find(x => x.id === id);
+        if (c) {
+          const chip = document.createElement('div');
+          chip.className = 'basket-chip';
+          chip.innerHTML = `<span>${c.name} (${c.hours}س)</span><span class="chip-remove" onclick="baBasket.delete('${c.id}'); runBAAudit(false);">×</span>`;
+          list.appendChild(chip);
+        }
+      });
+    }
   }
 
   function initDipInventory() {
     const container = document.getElementById('dip-inventory-container');
+    if (container.children.length > 0) return;
     container.innerHTML = '';
     const block = document.createElement('div');
     block.className = 'term-block';
@@ -910,6 +983,7 @@
     const target = parseInt(val);
     if (isNaN(target)) { dipPassed.clear(); runDipAudit(false); return; }
     dipPassed.clear();
+    dipBasket.clear();
     let acc = 0;
     DIP_PLAN.forEach(c => {
       if (acc + c.hours <= target) { dipPassed.add(c.id); acc += c.hours; }
@@ -923,7 +997,7 @@
 
   function handleDipToggle(id, val) {
     if (val) dipPassed.add(id); else dipPassed.delete(id);
-    runDipAudit(true);
+    runDipAudit(false);
   }
 
   function runDipAudit(updateInput = true) {
@@ -939,21 +1013,61 @@
     document.getElementById('dip-remaining-badge').textContent = `المتبقي: ${60 - passed} ساعة معتمدة`;
 
     let remaining = DIP_PLAN.filter(c => !dipPassed.has(c.id));
+    const season = document.getElementById('dip-season').value;
     const tbody = document.getElementById('dip-table-body');
     tbody.innerHTML = '';
     remaining.forEach(c => {
+      const isOffered = (c.season === season);
+      const isChecked = dipBasket.has(c.id);
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td><strong>${c.name}</strong> (${c.code})</td><td>${c.hours}س</td><td>—</td><td>مطروحة</td><td style="text-align:center;"><input type="checkbox" onchange="toggleDipBasket('${c.id}', this.checked)"></td>`;
+      tr.innerHTML = `
+        <td><strong>${c.name}</strong> (${c.code})</td>
+        <td>${c.hours}س</td>
+        <td>—</td>
+        <td>${isOffered ? 'مطروحة' : 'فصل مغاير'}</td>
+        <td style="text-align:center;">
+          ${isOffered ? `<input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDipBasket('${c.id}', this.checked)">` : '—'}
+        </td>`;
       tbody.appendChild(tr);
     });
   }
 
   function toggleDipBasket(id, val) {
+    const maxAllowed = 18; // الحد الأقصى القياسي للساعات الفصلية
+    let currentTotal = 0;
+    dipBasket.forEach(bId => {
+      const c = DIP_PLAN.find(x => x.id === bId);
+      if (c) currentTotal += c.hours;
+    });
+
+    const targetCourse = DIP_PLAN.find(x => x.id === id);
+    if (val && targetCourse && (currentTotal + targetCourse.hours > maxAllowed)) {
+      alert(`عذراً، الحد الأقصى للساعات المسموحة في الفصل هو ${maxAllowed} ساعات.`);
+      event.target.checked = false;
+      return;
+    }
+
     if (val) dipBasket.add(id); else dipBasket.delete(id);
     let total = 0;
     dipBasket.forEach(id => { const c = DIP_PLAN.find(x => x.id === id); if (c) total += c.hours; });
     document.getElementById('dip-basket-count').textContent = dipBasket.size;
     document.getElementById('dip-basket-hours').textContent = total;
+
+    const list = document.getElementById('dip-basket-items');
+    list.innerHTML = '';
+    if (dipBasket.size === 0) {
+      list.innerHTML = '<span style="font-size:13px; color:#a0aec0;">لم تختر أي مادة بعد.</span>';
+    } else {
+      dipBasket.forEach(id => {
+        const c = DIP_PLAN.find(x => x.id === id);
+        if (c) {
+          const chip = document.createElement('div');
+          chip.className = 'basket-chip';
+          chip.innerHTML = `<span>${c.name} (${c.hours}س)</span><span class="chip-remove" onclick="dipBasket.delete('${c.id}'); runDipAudit(false);">×</span>`;
+          list.appendChild(chip);
+        }
+      });
+    }
   }
 
   window.onload = () => {
