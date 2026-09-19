@@ -128,6 +128,17 @@
     .verdict-low { background: var(--warning); color: #fff; }
     .verdict-high { background: var(--danger); color: #fff; }
 
+    .solutions-box {
+      margin-top: 15px;
+      background: #fffbe6;
+      border: 1px solid #ffe58f;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 13px;
+      color: #876800;
+    }
+    .solutions-box h4 { margin: 0 0 8px 0; font-size: 14px; color: #b7791f; display: flex; align-items: center; gap: 6px; }
+
     .notes-section { margin-top: 15px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
     .notes-section label { display: block; font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 6px; }
     .notes-section textarea { width: 100%; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; resize: vertical; outline: none; }
@@ -293,11 +304,14 @@
         </div>
         <div class="basket-verdict" id="dip-basket-verdict">يرجى اختيار المقررات.</div>
       </div>
+      <div class="solutions-box" id="dip-solutions-box">
+        <h4>💡 التوجيهات وحلول حالات عدم طرح المقررات:</h4>
+        <div id="dip-solutions-text">إذا تعذر طرح بعض المقررات لظروف الجدول أو عدم اكتمال النصاب، يرجى الاستبدال بمقررات اختيارية متاحة أو التواصل مع لجنة الشؤون الأكاديمية لاستثناء تسجيل متطلب بديل.</div>
+      </div>
       <div class="notes-section">
         <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
         <textarea id="dip-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
-      <div id="dip-solutions"></div>
     </div>
   </div>
 
@@ -387,11 +401,14 @@
         </div>
         <div class="basket-verdict" id="ba-basket-verdict">يرجى اختيار المقررات.</div>
       </div>
+      <div class="solutions-box" id="ba-solutions-box">
+        <h4>💡 التوجيهات وحلول حالات عدم طرح المقررات:</h4>
+        <div id="ba-solutions-text">عند تعذر تسجيل مادة بسبب اختلاف الفصل أو تعارض المواعيد، يُنصح بالتركيز على استكمال متطلبات المتطلبات السابقة أو تسجيل مواد حرة واختيارية بديلة ضمن الخطة معتمدة.</div>
+      </div>
       <div class="notes-section">
         <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
         <textarea id="ba-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
-      <div id="ba-solutions"></div>
     </div>
   </div>
 
@@ -487,11 +504,14 @@
         </div>
         <div class="basket-verdict" id="ma-basket-verdict">يرجى اختيار المقررات.</div>
       </div>
+      <div class="solutions-box" id="ma-solutions-box">
+        <h4>💡 التوجيهات وحلول حالات عدم طرح المقررات:</h4>
+        <div id="ma-solutions-text">في حال عدم طرح مقررات تخصصية معينة في الفصل الحالي، يتم التنسيق مع لجنة الدراسات العليا لتسجيل مواد بديلة من قائمة المقررات الاختيارية المتاحة بالبرنامج.</div>
+      </div>
       <div class="notes-section">
         <label>📝 ملاحظات ومقترحات المستشار الأكاديمي:</label>
         <textarea id="ma-notes" placeholder="اكتب التوجيهات أو الملاحظات الأكاديمية للطالب هنا..."></textarea>
       </div>
-      <div id="ma-solutions"></div>
     </div>
   </div>
 
@@ -669,7 +689,7 @@
 
   function initMAInventory() {
     const container = document.getElementById('ma-inventory-container');
-    if (container.children.length > 0) return; // منع إعادة البناء إذا كانت موجودة للحفاظ على تفاعل الصناديق
+    if (container.children.length > 0) return;
     container.innerHTML = '';
     const terms = [
       { num: 1, title: 'مقررات الفصل الدراسي الأول - 12 ساعة معتمدة', cls: 'season-fall', text: 'فصل 1' },
@@ -774,8 +794,11 @@
     const season = document.getElementById('ma-season').value;
     const tbody = document.getElementById('ma-table-body');
     tbody.innerHTML = '';
+    
+    let unofferedCount = 0;
     remaining.forEach(c => {
       const isOffered = (c.season === season);
+      if (!isOffered) unofferedCount++;
       const isChecked = maBasket.has(c.id);
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -789,6 +812,16 @@
       `;
       tbody.appendChild(tr);
     });
+
+    const solBox = document.getElementById('ma-solutions-box');
+    const solText = document.getElementById('ma-solutions-text');
+    if (unofferedCount > 0) {
+      solBox.style.display = 'block';
+      solText.innerHTML = `تنبيه: يوجد <strong>${unofferedCount}</strong> مقررات غير مطروحة في الفصل الحالي (${season === 'fall' ? 'الخريف' : 'الربيع'}). في حال تعذر تسجيلها، يمكن استبدالها بمقررات اختيارية متاحة أو بالتنسيق مع لجنة الدراسات العليا لتسجيل بديل مكافئ.`;
+    } else {
+      solBox.style.display = 'none';
+    }
+
     updateMABasketUI();
   }
 
@@ -911,8 +944,11 @@
     const season = document.getElementById('ba-season').value;
     const tbody = document.getElementById('ba-table-body');
     tbody.innerHTML = '';
+    
+    let unofferedCount = 0;
     remaining.forEach(c => {
       const isOffered = (c.season === season);
+      if (!isOffered) unofferedCount++;
       const isChecked = baBasket.has(c.id);
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -925,10 +961,20 @@
         </td>`;
       tbody.appendChild(tr);
     });
+
+    const solBox = document.getElementById('ba-solutions-box');
+    const solText = document.getElementById('ba-solutions-text');
+    if (unofferedCount > 0) {
+      solBox.style.display = 'block';
+      solText.innerHTML = `تنبيه: هناك <strong>${unofferedCount}</strong> مقررات تتطلب فصلاً دراسياً مغايراً للفصل المستهدف (${season === 'fall' ? 'الخريف' : 'الربيع'}). في حال تعذر تسجيل مادة بسبب ذلك، يتم التواصل مع المرشد الأكاديمي لاستثناء تسجيل مادة بديلة تعويضية.`;
+    } else {
+      solBox.style.display = 'none';
+    }
+    updateBABasketUI();
   }
 
   function toggleBABasket(id, val) {
-    const maxAllowed = 18; // الحد الأقصى القياسي للساعات الفصلية
+    const maxAllowed = 18;
     let currentTotal = 0;
     baBasket.forEach(bId => {
       const c = BA_PLAN.find(x => x.id === bId);
@@ -943,6 +989,10 @@
     }
 
     if (val) baBasket.add(id); else baBasket.delete(id);
+    updateBABasketUI();
+  }
+
+  function updateBABasketUI() {
     let total = 0;
     baBasket.forEach(id => { const c = BA_PLAN.find(x => x.id === id); if (c) total += c.hours; });
     document.getElementById('ba-basket-count').textContent = baBasket.size;
@@ -1016,8 +1066,11 @@
     const season = document.getElementById('dip-season').value;
     const tbody = document.getElementById('dip-table-body');
     tbody.innerHTML = '';
+    
+    let unofferedCount = 0;
     remaining.forEach(c => {
       const isOffered = (c.season === season);
+      if (!isOffered) unofferedCount++;
       const isChecked = dipBasket.has(c.id);
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -1030,10 +1083,20 @@
         </td>`;
       tbody.appendChild(tr);
     });
+
+    const solBox = document.getElementById('dip-solutions-box');
+    const solText = document.getElementById('dip-solutions-text');
+    if (unofferedCount > 0) {
+      solBox.style.display = 'block';
+      solText.innerHTML = `تنبيه: يوجد <strong>${unofferedCount}</strong> مقررات خارج الفصل المستهدف الحالي (${season === 'fall' ? 'الخريف' : 'الربيع'}). يتم توجيه الطالب لاختيار المواد المتاحة والمطروحة فقط، أو تسجيل مقررات بديلة بموافقة المرشد.`;
+    } else {
+      solBox.style.display = 'none';
+    }
+    updateDipBasketUI();
   }
 
   function toggleDipBasket(id, val) {
-    const maxAllowed = 18; // الحد الأقصى القياسي للساعات الفصلية
+    const maxAllowed = 18;
     let currentTotal = 0;
     dipBasket.forEach(bId => {
       const c = DIP_PLAN.find(x => x.id === bId);
@@ -1048,6 +1111,10 @@
     }
 
     if (val) dipBasket.add(id); else dipBasket.delete(id);
+    updateDipBasketUI();
+  }
+
+  function updateDipBasketUI() {
     let total = 0;
     dipBasket.forEach(id => { const c = DIP_PLAN.find(x => x.id === id); if (c) total += c.hours; });
     document.getElementById('dip-basket-count').textContent = dipBasket.size;
