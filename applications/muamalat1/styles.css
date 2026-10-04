@@ -101,11 +101,11 @@ a{color:inherit}
   border-bottom:1px solid #edf1f5;
 }
 .q-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0}
-.q-number{font-weight:800;color:var(--navy);font-size:14px}
-.q-kind{font-size:12px;background:#eef4fb;color:var(--navy);padding:5px 9px;border-radius:999px;font-weight:700}
-.q-state{font-size:12px;color:#7c8796;background:#f1f5f9;border-radius:999px;padding:5px 9px;white-space:nowrap}
+.q-number{font-weight:800;color:var(--navy);font-size:15px}
+.q-kind{font-size:13px;background:#eef4fb;color:var(--navy);padding:5px 9px;border-radius:999px;font-weight:700}
+.q-state{font-size:13px;color:#7c8796;background:#f1f5f9;border-radius:999px;padding:5px 9px;white-space:nowrap}
 .q-state.done{color:var(--ok);background:var(--ok-bg)}
-.question{font-size:21px;font-weight:800;line-height:1.75;margin:0 0 14px;color:#172033}
+.question{font-size:18px;font-weight:800;line-height:1.75;margin:0 0 14px;color:#172033}
 .question-body{min-width:0}
 .options{
   display:grid;
@@ -173,7 +173,7 @@ a{color:inherit}
 }
 .facet-btn.correct{background:var(--ok-bg);border-color:#78b98a;color:var(--ok)}
 .facet-btn.wrong{background:var(--bad-bg);border-color:#df8d86;color:var(--bad)}
-.facet-note{font-size:13px;margin-top:7px;display:none;line-height:1.55}
+.facet-note{font-size:15px;margin-top:7px;display:none;line-height:1.55}
 .facet-note.show{display:block;color:var(--bad)}
 .essay-box{
   width:100%;
@@ -201,7 +201,7 @@ a{color:inherit}
   background:var(--soft);
 }
 .match-row select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font:inherit}
-.match-result{grid-column:1/-1;font-size:13px;display:none}
+.match-result{grid-column:1/-1;font-size:15px;display:none}
 .match-result.show{display:block}.match-result.ok{color:var(--ok)}.match-result.bad{color:var(--bad)}
 .nav-row,.nav-btn{display:none!important}
 .footer-note{text-align:center;color:#6b7787;font-size:15px;font-weight:700;margin-top:22px}
@@ -210,7 +210,7 @@ a{color:inherit}
   .lesson-head{padding:15px}
   .lesson-head h1{font-size:25px}
   .question-card{padding:14px 13px}
-  .question{font-size:17px}
+  .question{font-size:18px}
   .options{grid-template-columns:1fr}
   .class-grid{grid-template-columns:1fr}
   .match-row{grid-template-columns:1fr}
